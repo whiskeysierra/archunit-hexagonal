@@ -3,7 +3,6 @@ package io.github.whiskeysierra.archunit.hexagonal
 import com.tngtech.archunit.junit.ArchTest
 import com.tngtech.archunit.lang.ArchRule
 import com.tngtech.archunit.library.Architectures
-import com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.Creator
 import com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.slices
 
 object HexagonalArchitecture {
@@ -24,78 +23,45 @@ object HexagonalArchitecture {
             .whereLayer("domain.logic").mayNotBeAccessedByAnyLayer()
             .whereLayer("infrastructure").mayNotBeAccessedByAnyLayer()
 
-    private val driverAdapters =
+    @ArchTest
+    val driverAdapters: ArchRule =
+        slices()
+            .matching("..application.(*).(*)..")
+            .namingSlices("$1.$2")
+            .should().notDependOnEachOther()
+
+    @ArchTest
+    val domainApis: ArchRule =
         slices()
             .matching(
-                "..application.(*).*..",
+                "..application.(*)..",
                 "..domain.api.(*)..",
                 "..domain.logic.(*)..",
             )
             .namingSlices("$1")
+            .should().notDependOnEachOther()
 
     @ArchTest
-    val driverAdapterCycles: ArchRule =
-        driverAdapters.should().beFreeOfCycles()
-
-    @ArchTest
-    val driverAdapterDependencies: ArchRule =
-        driverAdapters.should().notDependOnEachOther()
-
-    private val domainApplicationProgrammingInterfaces =
-        slices()
-            .matching("..domain.api.(*)..")
-            .namingSlices("$1")
-
-    @ArchTest
-    val domainApplicationProgrammingInterfacesCycles: ArchRule =
-        domainApplicationProgrammingInterfaces.should().beFreeOfCycles()
-
-    @ArchTest
-    val domainApplicationProgrammingInterfacesDependencies: ArchRule =
-        domainApplicationProgrammingInterfaces.should().notDependOnEachOther()
-
-    private val domainLogic =
+    val domainLogics: ArchRule =
         slices()
             .matching("..domain.logic.(*).(*)..")
             .namingSlices("$1.$2")
+            .should().notDependOnEachOther()
 
     @ArchTest
-    val domainLogicCycles: ArchRule =
-        domainLogic.should().beFreeOfCycles()
-
-    @ArchTest
-    val domainLogicDependencies: ArchRule =
-        domainLogic.should().notDependOnEachOther()
-
-    private val domainServiceProviderInterfaces =
-        slices()
-            .matching("..domain.spi.(*)..")
-            .namingSlices("$1")
-
-    @ArchTest
-    val domainServiceProviderInterfaceCycles: ArchRule =
-        domainServiceProviderInterfaces.should().beFreeOfCycles()
-
-    @ArchTest
-    val domainServiceProviderInterfaceDependencies: ArchRule =
-        domainServiceProviderInterfaces.should().notDependOnEachOther()
-
-    private val drivenAdapters =
+    val domainSpis: ArchRule =
         slices()
             .matching(
                 "..domain.spi.(*)..",
-                "..infrastructure.(*).*..",
+                "..infrastructure.(*)..",
             )
             .namingSlices("$1")
+            .should().notDependOnEachOther()
 
     @ArchTest
-    val drivenAdapterCycles: ArchRule =
-        drivenAdapters.should().beFreeOfCycles()
-
-    @ArchTest
-    val drivenAdapterDependencies: ArchRule =
-        drivenAdapters.should().notDependOnEachOther()
-
-    private fun Creator.matching(vararg packageIdentifiers: String) =
-        assignedFrom(MultiPackageMatchingSliceIdentifier(*packageIdentifiers))
+    val drivenAdapters: ArchRule =
+        slices()
+            .matching("..infrastructure.(*).(*)..")
+            .namingSlices("$1.$2")
+            .should().notDependOnEachOther()
 }
