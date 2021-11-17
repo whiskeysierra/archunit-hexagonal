@@ -27,3 +27,4 @@ object ArchitectureTest {
     @ArchTest
     val tests: ArchTests = from(HexagonalArchitecture::class.java)
 }
+````
