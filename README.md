@@ -7,7 +7,7 @@ Hexagonal Architecture rules for ArchUnit
 
 To run the architecture tests in your repository do something along the following
 
-````
+```kotlin
 package my.package
 
 import com.tngtech.archunit.core.importer.ImportOption
@@ -27,4 +27,4 @@ object ArchitectureTest {
     @ArchTest
     val tests: ArchTests = from(HexagonalArchitecture::class.java)
 }
-````
+```
