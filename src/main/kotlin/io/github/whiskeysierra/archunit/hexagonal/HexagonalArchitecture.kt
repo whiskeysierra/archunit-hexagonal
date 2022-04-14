@@ -44,8 +44,8 @@ object HexagonalArchitecture {
     @ArchTest
     val domainLogics: ArchRule =
         slices()
-            .matching("..domain.logic.(*).(*)..")
-            .namingSlices("$1.$2")
+            .matching("..domain.logic.(*)..")
+            .namingSlices("$1")
             .should().notDependOnEachOther()
 
     @ArchTest
