@@ -10,23 +10,27 @@ object HexagonalArchitecture {
     @ArchTest
     val packages: ArchRule =
         Architectures.layeredArchitecture()
-            .layer("application").definedBy("..application..")
-            .layer("domain.api").definedBy("..domain.api..")
-            .layer("domain.spi").definedBy("..domain.spi..")
+            .optionalLayer("adapters").definedBy("..adapters..")
+            .optionalLayer("application").definedBy("..application..")
+            .optionalLayer("domain.api").definedBy("..domain.api..")
+            .optionalLayer("domain.spi").definedBy("..domain.spi..")
             .layer("domain.model").definedBy("..domain.model..")
             .layer("domain.logic").definedBy("..domain.logic..")
-            .layer("infrastructure").definedBy("..infrastructure..")
+            .optionalLayer("infrastructure").definedBy("..infrastructure..")
             .whereLayer("application").mayNotBeAccessedByAnyLayer()
-            .whereLayer("domain.api").mayOnlyBeAccessedByLayers("domain.logic", "application")
-            .whereLayer("domain.spi").mayOnlyBeAccessedByLayers("domain.logic", "infrastructure")
-            .whereLayer("domain.model").mayOnlyBeAccessedByLayers("domain.api", "domain.spi", "domain.logic", "application", "infrastructure")
+            .whereLayer("domain.api").mayOnlyBeAccessedByLayers("domain.logic", "adapters", "application")
+            .whereLayer("domain.spi").mayOnlyBeAccessedByLayers("domain.logic", "adapters", "infrastructure")
+            .whereLayer("domain.model").mayOnlyBeAccessedByLayers("domain.api", "domain.spi", "domain.logic", "adapters", "application", "infrastructure")
             .whereLayer("domain.logic").mayNotBeAccessedByAnyLayer()
             .whereLayer("infrastructure").mayNotBeAccessedByAnyLayer()
 
     @ArchTest
     val driverAdapters: ArchRule =
         slices()
-            .matching("..application.(*).(*)..")
+            .matching(
+                "..adapters.(*).(*)..",
+                "..application.(*).(*).."
+            )
             .namingSlices("$1.$2")
             .should().notDependOnEachOther()
 
@@ -34,6 +38,7 @@ object HexagonalArchitecture {
     val domainApis: ArchRule =
         slices()
             .matching(
+                "..adapters.(*)..",
                 "..application.(*)..",
                 "..domain.api.(*)..",
                 "..domain.logic.(*)..",
@@ -52,6 +57,7 @@ object HexagonalArchitecture {
     val domainSpis: ArchRule =
         slices()
             .matching(
+                "..adapters.(*)..",
                 "..domain.spi.(*)..",
                 "..infrastructure.(*)..",
             )
@@ -61,7 +67,10 @@ object HexagonalArchitecture {
     @ArchTest
     val drivenAdapters: ArchRule =
         slices()
-            .matching("..infrastructure.(*).(*)..")
+            .matching(
+                "..adapters.(*).(*)..",
+                "..infrastructure.(*).(*).."
+            )
             .namingSlices("$1.$2")
             .should().notDependOnEachOther()
 }

@@ -1,7 +1,6 @@
 # archunit-hexagonal
 
-Hexagonal Architecture rules for ArchUnit
-
+Hexagonal Architecture rules for ArchUnit.
 
 ## Usage
 
@@ -28,3 +27,68 @@ object ArchitectureTest {
     val tests: ArchTests = from(HexagonalArchitecture::class.java)
 }
 ```
+
+## Modes
+
+The following package structures are supported:
+
+### Default
+
+In the default setup, you are expected to have a split between:
+* `application`, the driver/primary/left side
+* `infrastructure`, the driven/secondary/right side
+
+* `application`
+    * `x` (for exposing `domain.api.x`)
+        * e.g. `grpc`, `http` or `management`
+* `domain`
+    * `api`
+        * `x`
+    * `model`
+    * `logic`
+    * `spi`
+        * `y`
+* `infrastructure`
+    * `y` (for implementing `domain.spi.y`)
+        * e.g. `memory`, `postgres` or `redis`
+
+### Unified Adapters
+
+Alternatively, you can merge `application` and `infrastructure` into `adapters`:
+
+* `adapters`
+    * `x`
+        * e.g. `grpc`, `http` or `management`
+    * `y`
+        * e.g. `memory`, `postgres` or `redis`
+* `domain`
+    * `api`
+        * `x`
+    * `model`
+    * `logic`
+    * `spi`
+        * `y`
+
+### Hybrid
+
+You can also use both approaches at the same time.
+That gives you a hybrid mix of the [Default](#default) and [Unified Adapters](#unified-adapters) approaches.
+
+* `adapters`
+    * `z` (for exposing `domain.api.z` **and** implementing `domain.spi.z`)
+      * e.g. `prometheus`
+* `application`
+    * `x`
+        * e.g. `grpc`, `http` or `management`
+* `domain`
+    * `api`
+        * `x`
+        * `z`
+    * `model`
+    * `logic`
+    * `spi`
+        * `y`
+        * `z`
+* `infrastructure`
+    * `y`
+        * e.g. `memory`, `postgres` or `redis`
