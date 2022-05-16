@@ -35,7 +35,7 @@ The following package structures are supported:
 ### Default
 
 In the default setup, you are expected to have:
-* 
+
 * `application`, the driver/primary/left side
     * `x` (for exposing `domain.api.x`)
         * e.g. `grpc`
