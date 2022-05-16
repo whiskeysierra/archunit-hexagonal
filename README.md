@@ -34,13 +34,14 @@ The following package structures are supported:
 
 ### Default
 
-In the default setup, you are expected to have a split between:
+In the default setup, you are expected to have:
+* 
 * `application`, the driver/primary/left side
-* `infrastructure`, the driven/secondary/right side
-
-* `application`
     * `x` (for exposing `domain.api.x`)
-        * e.g. `grpc`, `http` or `management`
+        * e.g. `grpc`
+        * e.g. `http`
+        * e.g. `management`
+        * ...
 * `domain`
     * `api`
         * `x`
@@ -48,9 +49,12 @@ In the default setup, you are expected to have a split between:
     * `logic`
     * `spi`
         * `y`
-* `infrastructure`
+* `infrastructure`, the driven/secondary/right side
     * `y` (for implementing `domain.spi.y`)
-        * e.g. `memory`, `postgres` or `redis`
+        * e.g. `memory`
+        * e.g. `postgres`
+        * e.g. `redis`
+        * ...
 
 ### Unified Adapters
 
@@ -58,9 +62,15 @@ Alternatively, you can merge `application` and `infrastructure` into `adapters`:
 
 * `adapters`
     * `x`
-        * e.g. `grpc`, `http` or `management`
+        * e.g. `grpc`
+        * e.g. `http`
+        * e.g. `management`
+        * ...
     * `y`
-        * e.g. `memory`, `postgres` or `redis`
+        * e.g. `memory`
+        * e.g. `postgres`
+        * e.g. `redis`
+        * ...
 * `domain`
     * `api`
         * `x`
@@ -77,9 +87,13 @@ That gives you a hybrid mix of the [Default](#default) and [Unified Adapters](#u
 * `adapters`
     * `z` (for exposing `domain.api.z` **and** implementing `domain.spi.z`)
       * e.g. `prometheus`
+      * ...
 * `application`
     * `x`
-        * e.g. `grpc`, `http` or `management`
+        * e.g. `grpc`
+        * e.g. `http`
+        * e.g. `management`
+        * ...
 * `domain`
     * `api`
         * `x`
@@ -91,4 +105,7 @@ That gives you a hybrid mix of the [Default](#default) and [Unified Adapters](#u
         * `z`
 * `infrastructure`
     * `y`
-        * e.g. `memory`, `postgres` or `redis`
+        * e.g. `memory`
+        * e.g. `postgres`
+        * e.g. `redis`
+        * ...
