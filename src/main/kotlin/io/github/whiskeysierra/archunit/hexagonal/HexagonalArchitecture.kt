@@ -10,6 +10,7 @@ object HexagonalArchitecture {
     @ArchTest
     val packages: ArchRule =
         Architectures.layeredArchitecture()
+            .consideringOnlyDependenciesInLayers()
             .optionalLayer("adapters").definedBy("..adapters..")
             .optionalLayer("application").definedBy("..application..")
             .optionalLayer("domain.api").definedBy("..domain.api..")

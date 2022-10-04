@@ -36,7 +36,7 @@
     </scm>
 
     <properties>
-        <archunit.version>0.23.1</archunit.version>
+        <archunit.version>1.0.0</archunit.version>
         <dokka.version>1.6.20</dokka.version>
         <java.version>11</java.version>
         <kotlin.version>1.6.20</kotlin.version>
