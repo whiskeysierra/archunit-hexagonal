@@ -8,7 +8,7 @@ import com.tngtech.archunit.library.dependencies.SliceIdentifier.ignore
 import com.tngtech.archunit.library.dependencies.SliceIdentifier.of
 
 internal class MultiPackageMatchingSliceIdentifier(
-    private vararg val packageIdentifiers: String
+    private vararg val packageIdentifiers: String,
 ) : SliceAssignment {
 
     override fun getIdentifierOf(javaClass: JavaClass): SliceIdentifier =

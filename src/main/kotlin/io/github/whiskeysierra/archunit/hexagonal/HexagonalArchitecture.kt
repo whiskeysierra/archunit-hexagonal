@@ -21,7 +21,14 @@ object HexagonalArchitecture {
             .whereLayer("application").mayNotBeAccessedByAnyLayer()
             .whereLayer("domain.api").mayOnlyBeAccessedByLayers("domain.logic", "adapters", "application")
             .whereLayer("domain.spi").mayOnlyBeAccessedByLayers("domain.logic", "adapters", "infrastructure")
-            .whereLayer("domain.model").mayOnlyBeAccessedByLayers("domain.api", "domain.spi", "domain.logic", "adapters", "application", "infrastructure")
+            .whereLayer("domain.model").mayOnlyBeAccessedByLayers(
+                "domain.api",
+                "domain.spi",
+                "domain.logic",
+                "adapters",
+                "application",
+                "infrastructure",
+            )
             .whereLayer("domain.logic").mayNotBeAccessedByAnyLayer()
             .whereLayer("infrastructure").mayNotBeAccessedByAnyLayer()
 
@@ -30,7 +37,7 @@ object HexagonalArchitecture {
         slices()
             .matching(
                 "..adapters.(*).(*)..",
-                "..application.(*).(*).."
+                "..application.(*).(*)..",
             )
             .namingSlices("$1.$2")
             .should().notDependOnEachOther()
@@ -39,8 +46,6 @@ object HexagonalArchitecture {
     val domainApis: ArchRule =
         slices()
             .matching(
-                "..adapters.(*)..",
-                "..application.(*)..",
                 "..domain.api.(*)..",
                 "..domain.logic.(*)..",
             )
@@ -70,7 +75,7 @@ object HexagonalArchitecture {
         slices()
             .matching(
                 "..adapters.(*).(*)..",
-                "..infrastructure.(*).(*).."
+                "..infrastructure.(*).(*)..",
             )
             .namingSlices("$1.$2")
             .should().notDependOnEachOther()
