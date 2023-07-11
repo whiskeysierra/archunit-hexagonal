@@ -50,7 +50,7 @@ object HexagonalArchitecture {
                 "..domain.logic.(*)..",
             )
             .namingSlices("$1")
-            .should().notDependOnEachOther()
+            .should().beFreeOfCycles()
 
     @ArchTest
     val domainLogics: ArchRule =
